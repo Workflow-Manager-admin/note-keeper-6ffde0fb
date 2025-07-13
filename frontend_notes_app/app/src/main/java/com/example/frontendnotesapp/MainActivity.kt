@@ -36,7 +36,7 @@ fun NotesAppRoot(context: android.content.Context) {
             error = androidx.compose.ui.graphics.Color(0xFFB00020),
             onPrimary = androidx.compose.ui.graphics.Color.White,
             onSecondary = androidx.compose.ui.graphics.Color(0xFF333333),
-            onSurface = androidx.compose.ui.graphics.Color(0xFF333333),
+            onSurface = androidx.compose.ui.graphics.Color(0xFF000000),
             onBackground = androidx.compose.ui.graphics.Color(0xFF222222),
             onError = androidx.compose.ui.graphics.Color.White
         )
