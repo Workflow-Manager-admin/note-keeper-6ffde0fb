@@ -245,7 +245,7 @@ fun MainScreenPreview() {
         Note("2", "Sample 2", "Another note goes here which is much longer and possibly truncated in the list view.")
     )
 
-    // Local stub for exactly what MainScreen uses, using the same filteredNotes API
+    // Minimal stub providing just enough of the NotesViewModel API for preview.
     val previewState = kotlinx.coroutines.flow.MutableStateFlow(fakeNotes)
     val fakeViewModel = object {
         val filteredNotes: kotlinx.coroutines.flow.StateFlow<List<Note>> = previewState
@@ -253,12 +253,12 @@ fun MainScreenPreview() {
         fun deleteNote(id: String) {}
     }
 
-    // Use unsafe cast ONLY in preview to bypass type system
+    // Use an 'unsafe' cast because only filteredNotes/searchNotes/deleteNote are called and expected by MainScreen
     @Suppress("UNCHECKED_CAST")
     MaterialTheme {
         Surface {
             MainScreen(
-                viewModel = fakeViewModel as NotesViewModel, // Only the collected filteredNotes, searchNotes, and deleteNote are used in preview
+                viewModel = fakeViewModel as NotesViewModel,
                 onAddNote = {},
                 onEditNote = {}
             )

@@ -7,20 +7,22 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import io.ktor.http.*
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Repository to fetch, add, update, delete, and search notes via Supabase REST API.
+ */
 class NotesRepository(
     private val supabaseUrl: String,
     private val supabaseKey: String
 ) {
     private val httpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
-            // The 'json' extension is resolved by the proper import above.
             json(Json { ignoreUnknownKeys = true })
         }
     }
