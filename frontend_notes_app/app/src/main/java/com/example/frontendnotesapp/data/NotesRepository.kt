@@ -6,11 +6,11 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.contentnegotiation.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import kotlinx.serialization.json.JsonPrimitive
 import io.ktor.http.*
 
 /**
@@ -57,8 +57,8 @@ class NotesRepository(
             }
             contentType(ContentType.Application.Json)
             setBody(buildJsonObject {
-                put("title", title)
-                put("content", content)
+                put("title", JsonPrimitive(title))
+                put("content", JsonPrimitive(content))
             }.toString())
         }
         val bodyStr = response.bodyAsText()
@@ -76,8 +76,8 @@ class NotesRepository(
             }
             contentType(ContentType.Application.Json)
             setBody(buildJsonObject {
-                put("title", title)
-                put("content", content)
+                put("title", JsonPrimitive(title))
+                put("content", JsonPrimitive(content))
             }.toString())
         }
         val bodyStr = response.bodyAsText()
