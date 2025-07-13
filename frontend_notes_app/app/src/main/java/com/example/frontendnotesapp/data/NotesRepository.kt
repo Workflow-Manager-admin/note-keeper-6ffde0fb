@@ -7,10 +7,7 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.plugins.logging.LogLevel
-import kotlinx.serialization.builtins.ListSerializer
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -23,10 +20,8 @@ class NotesRepository(
 ) {
     private val httpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
+            // The 'json' extension is resolved by the proper import above.
             json(Json { ignoreUnknownKeys = true })
-        }
-        install(io.ktor.client.plugins.logging.Logging) {
-            level = LogLevel.NONE
         }
     }
 
@@ -48,7 +43,7 @@ class NotesRepository(
             parameter("order", "id.desc")
         }
         val bodyStr = response.bodyAsText()
-        Json.decodeFromString(ListSerializer(Note.serializer()), bodyStr)
+        Json.decodeFromString<List<Note>>(bodyStr)
     }
 
     // PUBLIC_INTERFACE
@@ -65,7 +60,7 @@ class NotesRepository(
             }.toString())
         }
         val bodyStr = response.bodyAsText()
-        val notes = Json.decodeFromString(ListSerializer(Note.serializer()), bodyStr)
+        val notes = Json.decodeFromString<List<Note>>(bodyStr)
         notes.firstOrNull()
     }
 
@@ -112,6 +107,6 @@ class NotesRepository(
             parameter("order", "id.desc")
         }
         val bodyStr = response.bodyAsText()
-        Json.decodeFromString(ListSerializer(Note.serializer()), bodyStr)
+        Json.decodeFromString<List<Note>>(bodyStr)
     }
 }

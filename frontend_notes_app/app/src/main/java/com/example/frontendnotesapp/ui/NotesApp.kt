@@ -237,9 +237,6 @@ fun EditNoteScreen(
     }
 }
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
@@ -247,15 +244,21 @@ fun MainScreenPreview() {
         Note("1", "Sample 1", "Body text for the first note goes here."),
         Note("2", "Sample 2", "Another note goes here which is much longer and possibly truncated in the list view.")
     )
-    // Minimal local ViewModel-like for preview purposes
-    class PreviewNotesVM : NotesViewModel() {
-        private val notesState = MutableStateFlow<List<Note>>(fakeNotes)
-        override val filteredNotes: StateFlow<List<Note>> get() = notesState
+
+    // Local stub for exactly what MainScreen uses, using the same filteredNotes API
+    val previewState = kotlinx.coroutines.flow.MutableStateFlow(fakeNotes)
+    val fakeViewModel = object {
+        val filteredNotes: kotlinx.coroutines.flow.StateFlow<List<Note>> = previewState
+        fun searchNotes(query: String) {}
+        fun deleteNote(id: String) {}
     }
+
+    // Use unsafe cast ONLY in preview to bypass type system
+    @Suppress("UNCHECKED_CAST")
     MaterialTheme {
         Surface {
             MainScreen(
-                viewModel = PreviewNotesVM(),
+                viewModel = fakeViewModel as NotesViewModel, // Only the collected filteredNotes, searchNotes, and deleteNote are used in preview
                 onAddNote = {},
                 onEditNote = {}
             )
